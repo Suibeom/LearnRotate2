@@ -39,18 +39,25 @@ calbak = keras.callbacks.ReduceLROnPlateau(monitor='val_acc', factor=0.5, patien
 # datagen = ImageDataGenerator(rotation_range=0,height_shift_range=0,width_shift_range=0,data_format='channels_first')
 # hist1 = model5.fit_generator(datagen.flow(x_train,y_train,batch_size=3000),validation_data=(x_test,y_test),steps_per_epoch=20,epochs=2, callbacks=[calbak])
 
-for i in range(15):
-    print(2*i)
-    t = (i/7.5 - 0.5)**2
+for i in range(30):
+    print(3*i)
+    t = 0.01 # (i/7.5)**2/4
     print(t * 360)
     datagen = ImageDataGenerator(rotation_range=360*t, height_shift_range=5*t, width_shift_range=5*t,
                                  data_format='channels_first')
     hist1 = model5.fit_generator(datagen.flow(x_train, y_train, batch_size=3000), validation_data=(x_test, y_test),
                                  steps_per_epoch=20, epochs=1, callbacks=[calbak])
-    print(2*i + 1)
+    tough_acc = hist1.history["val_acc"]
+    print(3*i + 1)
     print(t*90)
     datagen = ImageDataGenerator(rotation_range=360 * t/4, height_shift_range=5 * t/4, width_shift_range=5 * t/4,
                                  data_format='channels_first')
-    model5.fit_generator(datagen.flow(x_train, y_train, batch_size=3000), validation_data=(x_test, y_test),
+    hist2 = model5.fit_generator(datagen.flow(x_train, y_train, batch_size=3000), validation_data=(x_test, y_test),
                          steps_per_epoch=20, epochs=1, callbacks=[calbak])
-
+    moderate_acc = hist2.history["val_acc"]
+    print(3*i + 2)
+    datagen = ImageDataGenerator(rotation_range=5, height_shift_range=1, width_shift_range=1,
+                                 data_format='channels_first')
+    hist3 = model5.fit_generator(datagen.flow(x_train, y_train, batch_size=3000), validation_data=(x_test, y_test),
+                         steps_per_epoch=20, epochs=1, callbacks=[calbak])
+    easy_acc = hist3.history["val_acc"]
