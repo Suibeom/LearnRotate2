@@ -39,53 +39,18 @@ calbak = keras.callbacks.ReduceLROnPlateau(monitor='val_acc', factor=0.5, patien
 # datagen = ImageDataGenerator(rotation_range=0,height_shift_range=0,width_shift_range=0,data_format='channels_first')
 # hist1 = model5.fit_generator(datagen.flow(x_train,y_train,batch_size=3000),validation_data=(x_test,y_test),steps_per_epoch=20,epochs=2, callbacks=[calbak])
 
+for i in range(15):
+    print(2*i)
+    t = (i/7.5 - 0.5)**2
+    print(t * 360)
+    datagen = ImageDataGenerator(rotation_range=360*t, height_shift_range=5*t, width_shift_range=5*t,
+                                 data_format='channels_first')
+    hist1 = model5.fit_generator(datagen.flow(x_train, y_train, batch_size=3000), validation_data=(x_test, y_test),
+                                 steps_per_epoch=20, epochs=1, callbacks=[calbak])
+    print(2*i + 1)
+    print(t*90)
+    datagen = ImageDataGenerator(rotation_range=360 * t/4, height_shift_range=5 * t/4, width_shift_range=5 * t/4,
+                                 data_format='channels_first')
+    model5.fit_generator(datagen.flow(x_train, y_train, batch_size=3000), validation_data=(x_test, y_test),
+                         steps_per_epoch=20, epochs=1, callbacks=[calbak])
 
-
-datagen = ImageDataGenerator(rotation_range=30,height_shift_range=1,width_shift_range=1,data_format='channels_first')
-hist2 = model5.fit_generator(datagen.flow(x_train,y_train,batch_size=3000),validation_data=(x_test,y_test),steps_per_epoch=20,epochs=1, callbacks=[calbak])
-
-datagen = ImageDataGenerator(rotation_range=45,height_shift_range=2,width_shift_range=2,data_format='channels_first')
-hist3 = model5.fit_generator(datagen.flow(x_train,y_train,batch_size=3000),validation_data=(x_test,y_test),steps_per_epoch=20,epochs=1, callbacks=[calbak])
-
-datagen = ImageDataGenerator(rotation_range=90,height_shift_range=1,width_shift_range=1,data_format='channels_first')
-hist2 = model5.fit_generator(datagen.flow(x_train,y_train,batch_size=3000),validation_data=(x_test,y_test),steps_per_epoch=20,epochs=1, callbacks=[calbak])
-
-datagen = ImageDataGenerator(rotation_range=360,height_shift_range=2,width_shift_range=2,data_format='channels_first')
-hist3 = model5.fit_generator(datagen.flow(x_train,y_train,batch_size=3000),validation_data=(x_test,y_test),steps_per_epoch=20,epochs=1, callbacks=[calbak])
-
-
-
-
-datagen = ImageDataGenerator(rotation_range=30,height_shift_range=1,width_shift_range=1,data_format='channels_first')
-hist2 = model5.fit_generator(datagen.flow(x_train,y_train,batch_size=3000),validation_data=(x_test,y_test),steps_per_epoch=20,epochs=1, callbacks=[calbak])
-
-datagen = ImageDataGenerator(rotation_range=45,height_shift_range=2,width_shift_range=2,data_format='channels_first')
-hist3 = model5.fit_generator(datagen.flow(x_train,y_train,batch_size=3000),validation_data=(x_test,y_test),steps_per_epoch=20,epochs=1, callbacks=[calbak])
-
-datagen = ImageDataGenerator(rotation_range=90,height_shift_range=1,width_shift_range=1,data_format='channels_first')
-hist2 = model5.fit_generator(datagen.flow(x_train,y_train,batch_size=3000),validation_data=(x_test,y_test),steps_per_epoch=20,epochs=1, callbacks=[calbak])
-
-datagen = ImageDataGenerator(rotation_range=360,height_shift_range=2,width_shift_range=2,data_format='channels_first')
-hist3 = model5.fit_generator(datagen.flow(x_train,y_train,batch_size=3000),validation_data=(x_test,y_test),steps_per_epoch=20,epochs=1, callbacks=[calbak])
-
-
-
-datagen = ImageDataGenerator(rotation_range=90,height_shift_range=1,width_shift_range=1,data_format='channels_first')
-hist2 = model5.fit_generator(datagen.flow(x_train,y_train,batch_size=3000),validation_data=(x_test,y_test),steps_per_epoch=20,epochs=1, callbacks=[calbak])
-
-datagen = ImageDataGenerator(rotation_range=360,height_shift_range=2,width_shift_range=2,data_format='channels_first')
-hist3 = model5.fit_generator(datagen.flow(x_train,y_train,batch_size=3000),validation_data=(x_test,y_test),steps_per_epoch=20,epochs=1, callbacks=[calbak])
-
-
-datagen = ImageDataGenerator(rotation_range=90,height_shift_range=1,width_shift_range=1,data_format='channels_first')
-hist2 = model5.fit_generator(datagen.flow(x_train,y_train,batch_size=3000),validation_data=(x_test,y_test),steps_per_epoch=20,epochs=1, callbacks=[calbak])
-
-datagen = ImageDataGenerator(rotation_range=360,height_shift_range=2,width_shift_range=2,data_format='channels_first')
-hist3 = model5.fit_generator(datagen.flow(x_train,y_train,batch_size=3000),validation_data=(x_test,y_test),steps_per_epoch=20,epochs=1, callbacks=[calbak])
-
-
-datagen = ImageDataGenerator(rotation_range=360,height_shift_range=5,width_shift_range=5,data_format='channels_first')
-datagen.flow(x_train,y_train,batch_size=3000)
-hist4 = model5.fit_generator(datagen.flow(x_train,y_train,batch_size=3000),validation_data=(x_test,y_test),steps_per_epoch=20,epochs=20, callbacks=[calbak])
-
-print("woo!")
