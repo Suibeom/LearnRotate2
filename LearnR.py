@@ -39,7 +39,7 @@ calbak = keras.callbacks.ReduceLROnPlateau(monitor='val_acc', factor=0.5, patien
 # datagen = ImageDataGenerator(rotation_range=0,height_shift_range=0,width_shift_range=0,data_format='channels_first')
 # hist1 = model5.fit_generator(datagen.flow(x_train,y_train,batch_size=3000),validation_data=(x_test,y_test),steps_per_epoch=20,epochs=2, callbacks=[calbak])
 
-for i in range(30):
+for i in range(10):
     print(3*i)
     t = (i/7.5)**2/4
     print(t * 360)
