@@ -41,7 +41,7 @@ calbak = keras.callbacks.ReduceLROnPlateau(monitor='val_acc', factor=0.5, patien
 
 for i in range(30):
     print(3*i)
-    t = 0.01 # (i/7.5)**2/4
+    t = (i/7.5)**2/4
     print(t * 360)
     datagen = ImageDataGenerator(rotation_range=360*t, height_shift_range=5*t, width_shift_range=5*t,
                                  data_format='channels_first')
