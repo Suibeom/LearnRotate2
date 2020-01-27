@@ -12,6 +12,7 @@ from keras.datasets import mnist
 import keras
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.gaussian_process import GaussianProcessRegressor
 from keras.layers import Dense, Dropout, Activation, InputLayer
 from keras.optimizers import Nadam, Adam
 from keras.preprocessing.image import ImageDataGenerator
@@ -35,6 +36,12 @@ class BatchCombinedIterator():
         self.current = np.concatenate((a0, b0)), np.concatenate((a1, b1))
         return self.current
 
+
+def GPP(X, y, X_):
+    gp = GaussianProcessRegressor().fit(X[:, np.newaxis], y)
+    y, y_sig = gp.predict(X_[:, np.newaxis], return_std = True)
+    y_upper = y + 2*y_sig
+    return X_[np.argmax(y_upper)]
 
 model5 = Sequential([
     InputLayer(input_shape=(1, 28, 28)),
@@ -98,16 +105,67 @@ def run_with_schedule(tsched):
     return tough_acc
 
 
+def run_with_mixture(r, t):
+    model5 = Sequential([
+        InputLayer(input_shape=(1, 28, 28)),
+        keras.layers.Flatten(),
+        Dropout(0.4),
+        keras.layers.LeakyReLU(alpha=0.1),
+        Dense(500),
+        keras.layers.LeakyReLU(alpha=0.1),
+        Dense(290),
+        keras.layers.LeakyReLU(alpha=0.1),
+        Dense(10, activation='softmax')
+    ])
+    model5.compile(optimizer='nadam', loss='categorical_crossentropy', metrics=['accuracy'])
+    for i in range(t):
+        t = 1.0
+        print(i)
+        datagen1 = ImageDataGenerator(rotation_range=int(360*t), height_shift_range=int(5*t), width_shift_range=int(5*t),
+                                     data_format='channels_first')
+        datagen2 = ImageDataGenerator(rotation_range=int(90 * t), height_shift_range=int(2 * t),
+                                     width_shift_range=int(2 * t),
+                                     data_format='channels_first')
+        datagen1_data = datagen1.flow(x_train, y_train, batch_size=int(3000*r))
+        datagen2_data = datagen2.flow(x_train, y_train, batch_size=int(3000*(1-r)))
+        batcher = BatchCombinedIterator(datagen1_data, datagen2_data)
+        if False:
+            for j in range(1,17):
+                plt.subplot(4,4,j).imshow(datagen_data[0][0][j][0])
+            plt.savefig(f'./diag/epoch{i:02}.png')
+
+        hist1 = model5.fit_generator(batcher, validation_data=(x_test, y_test),
+                                     steps_per_epoch=20, epochs=1, callbacks=[calbak])
+        tough_acc = hist1.history["val_acc"][0]
+    return tough_acc
+
+
+
+
 tsched = np.array([0.3, 0.2, 0.1, 0.0, 0.2, 0.4, 0.8, 1.0, 1.0, 1.0, 0.0, 0.1, 0.2, 0.3, 0.0,
                    0.0, 0.0, 0.1, 0.2, 0.3, 0.6, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
-results = np.zeros(15)
-for i in range(3,15):
-    tsched = np.zeros(30)
-    tsched[range(i)] = 1.0
-    results[i] = run_with_schedule(tsched)
-    for i in range(15):
-        print(f'Dropoff at {i:2}')
-        print(results[i])
+results = np.zeros(30)
+# for i in range(3,15):
+#     tsched = np.zeros(30)
+#     tsched[range(i)] = 1.0
+#     results[i] = run_with_schedule(tsched)
+#     for i in range(15):
+#         print(f'Dropoff at {i:2}')
+#         print(results[i])
+
+r_tries = np.zeros(30)
+
+for i in range(30):
+    if i == 0:
+        r = 0.2
+    print(f'Now trying; {r:3}')
+    results[i] = run_with_mixture(r, 15)
+    r_tries[i] = r
+    for j in range(i+1):
+        print(r_tries[j])
+        print(results[j])
+    r = GPP(r_tries[range(i+1)], results[range(i+1)], np.linspace(0,1,1000))
+print("Done!")
 
 
 
