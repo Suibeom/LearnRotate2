@@ -1,20 +1,13 @@
 import os
-
-from keras.callbacks import History
-
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
-from keras.models import Model, Sequential
-from keras.layers import Input
-from keras.layers import Flatten, Concatenate
-from keras.layers.advanced_activations import LeakyReLU
+from keras.models import Sequential
 from keras.datasets import mnist
 import keras
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.gaussian_process import GaussianProcessRegressor
-from keras.layers import Dense, Dropout, Activation, InputLayer
-from keras.optimizers import Nadam, Adam
+from keras.layers import Dense, Dropout, InputLayer
 from keras.preprocessing.image import ImageDataGenerator
 
 
@@ -64,9 +57,6 @@ y_test = keras.utils.to_categorical(y_test, num_classes=10)
 y_train = keras.utils.to_categorical(y_train, num_classes=10)
 calbak = keras.callbacks.ReduceLROnPlateau(monitor='val_acc', factor=0.5, patience=25, verbose=10, mode='auto',
                                            min_delta=0.0001, cooldown=0, min_lr=0)
-#
-# datagen = ImageDataGenerator(rotation_range=0,height_shift_range=0,width_shift_range=0,data_format='channels_first')
-# hist1 = model5.fit_generator(datagen.flow(x_train,y_train,batch_size=3000),validation_data=(x_test,y_test),steps_per_epoch=20,epochs=2, callbacks=[calbak])
 
 def run_with_schedule(tsched):
     model5 = Sequential([
