@@ -8,11 +8,7 @@ from keras.models import Model, Sequential
 from keras.layers import Input
 from keras.layers import Flatten, Concatenate
 from keras.layers.advanced_activations import LeakyReLU
-from keras.datasets import mnist
-import keras
-import numpy as np
-from keras.layers import Dense, Dropout, Activation, InputLayer
-from keras.optimizers import Nadam, Adam
+from keras.layers import Dense, Dropout
 from keras.preprocessing.image import ImageDataGenerator
 
 x1 = Input(shape=(1,28,28))
